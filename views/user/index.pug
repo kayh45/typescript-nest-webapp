@@ -1,5 +1,31 @@
-html
-  head
-    meta(charset="utf-8")
-    title User
-  body #{ data }
+extends ../layout
+block content
+  div(id="root")
+    div(class="h2") 
+      | User table
+      a(class="btn btn-outline-primary ml-2" href="/") To Home..
+    table(class="table table-hover w-50")
+      thead
+        tr
+          th(scope="col") name
+          th(scope="col") email
+          th(scope="col")
+      tbody
+        each user in users
+          tr
+            td= user.name
+            td= user.email
+            td 
+              button(class="btn btn-outline-danger remove" data-id=user.id) 삭제
+    form(method="post" class="w-50 border p-5")
+      div(class="form-group row")
+        label(for="name" class="col-2 col-form-label") 이름
+        div(class="col-10")
+          input(type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요." required)
+      div(class="form-group row")
+        label(for="email" class="col-2 col-form-label") 이메일
+        div(class="col-10")
+          input(type="text" class="form-control" name="email" id="email" placeholder="이메일을 입력하세요." required)
+      button(type="submit" class="btn btn-primary") 저장
+    
+    

@@ -1,4 +1,4 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Post, Body, Redirect, Delete, Param} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './users.entity';
 
@@ -7,18 +7,34 @@ export class UsersController {
 
   constructor(private readonly userService: UsersService) {}
 
-  // @Get()
-  // @Render('user/index')
-  // root() {
-  //   let data = this.findAll();
+  @Get()
+  @Render('user/index')
+  async root() {
+    let data: any = {};
 
-  //   console.log(data);
+    data.users = await this.exe_get_list();
+    data.title = 'Database Test';
 
-  //   return data;
-  // }
+    console.log(data.users);
 
-  @Get('/findAll')
-  async findAll(): Promise<Users[]> {
-    return await this.userService.findAll();
+    return data;
   }
+
+  @Get()
+  async exe_get_list(): Promise<Users[]> {
+    return await this.userService.exe_get_list();
+  }
+
+  @Post()
+  @Redirect('/user')
+  async exe_add(@Body() param: any) {
+    await this.userService.exe_add(param);
+  }
+
+  @Delete(':id')
+  async exe_remove(@Param('id') id: string) {
+    const user: Users = await this.userService.exe_get(id);
+    await this.userService.exe_remove(user);
+  }
+
 }
